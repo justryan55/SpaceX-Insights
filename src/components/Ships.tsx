@@ -1,6 +1,18 @@
 import { useQuery, gql } from "@apollo/client";
 import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from "recharts";
 
+interface Ship {
+  id: string;
+  model: string;
+  name: string;
+  type: string;
+  status: string;
+}
+
+interface ShipsData {
+  ships: Ship[];
+}
+
 const GET_SHIPS = gql`
   query Ships {
     ships {
@@ -14,7 +26,7 @@ const GET_SHIPS = gql`
 `;
 
 const Ships = () => {
-  const { loading, error, data } = useQuery(GET_SHIPS);
+  const { loading, error, data } = useQuery<ShipsData>(GET_SHIPS);
 
   if (loading)
     return (
@@ -34,12 +46,15 @@ const Ships = () => {
     );
   if (error) return <p>Error: {error.message}</p>;
 
-  const chartData = data.ships.reduce((acc, ship) => {
-    const shipType = ship.type;
-    if (!acc[shipType]) acc[shipType] = 0;
-    acc[shipType]++;
-    return acc;
-  }, {});
+  const chartData = data!.ships.reduce<{ [key: string]: number }>(
+    (acc, ship) => {
+      const shipType = ship.type;
+      if (!acc[shipType]) acc[shipType] = 0;
+      acc[shipType]++;
+      return acc;
+    },
+    {}
+  );
 
   const formattedData = Object.keys(chartData).map((type) => ({
     name: type,

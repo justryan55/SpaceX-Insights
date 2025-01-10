@@ -9,6 +9,21 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+interface Dragon {
+  name: string;
+  first_flight: string;
+  diameter: {
+    feet: number;
+  };
+  launch_payload_mass: {
+    lb: number;
+  };
+}
+
+interface DragonsData {
+  dragons: Dragon[];
+}
+
 const GET_DRAGONS = gql`
   query Rockets {
     dragons {
@@ -25,7 +40,7 @@ const GET_DRAGONS = gql`
 `;
 
 const DragonsBarGraph = () => {
-  const { loading, error, data } = useQuery(GET_DRAGONS);
+  const { loading, error, data } = useQuery<DragonsData>(GET_DRAGONS);
 
   if (loading)
     return (
@@ -45,7 +60,7 @@ const DragonsBarGraph = () => {
     );
   if (error) return <p>Error: {error.message}</p>;
 
-  const formattedData = data.dragons.map((dragon) => ({
+  const formattedData = data!.dragons.map((dragon) => ({
     name: dragon.name,
     diameter: dragon.diameter.feet,
     payload_capacity: dragon.launch_payload_mass.lb,

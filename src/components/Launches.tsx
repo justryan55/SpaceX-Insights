@@ -11,6 +11,21 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+interface Rocket {
+  rocket_name: string;
+}
+
+interface Launch {
+  mission_name: string;
+  launch_year: string;
+  launch_date_utc: string;
+  rocket: Rocket;
+}
+
+interface LaunchesData {
+  launches: Launch[];
+}
+
 const GET_LAUNCHES = gql`
   query {
     launches(limit: 10) {
@@ -25,7 +40,7 @@ const GET_LAUNCHES = gql`
 `;
 
 const Launches = () => {
-  const { loading, error, data } = useQuery(GET_LAUNCHES);
+  const { loading, error, data } = useQuery<LaunchesData>(GET_LAUNCHES);
 
   if (loading)
     return (
@@ -45,12 +60,15 @@ const Launches = () => {
     );
   if (error) return <p>Error: {error.message}</p>;
 
-  const chartData = data.launches.reduce((acc, launch) => {
-    const year = launch.launch_year;
-    if (!acc[year]) acc[year] = 0;
-    acc[year]++;
-    return acc;
-  }, {});
+  const chartData = data!.launches.reduce<{ [key: string]: number }>(
+    (acc, launch) => {
+      const year = launch.launch_year;
+      if (!acc[year]) acc[year] = 0;
+      acc[year]++;
+      return acc;
+    },
+    {}
+  );
 
   const formattedData = Object.keys(chartData).map((year) => ({
     year,
