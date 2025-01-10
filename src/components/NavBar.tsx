@@ -9,6 +9,7 @@ import {
 } from "@headlessui/react";
 
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 const navigation = [
   { name: "Home", href: "/", current: false },
@@ -42,13 +43,15 @@ export default function NavBar() {
             </DisclosureButton>
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex shrink-0 items-center">
-              <img alt="Rocket" src="/rocket.svg" className="h-8 w-auto" />
-            </div>
+            <Link href={"/"}>
+              <div className="flex shrink-0 items-center">
+                <img alt="Rocket" src="/rocket.svg" className="h-8 w-auto" />
+              </div>
+            </Link>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
                     href={item.href}
                     aria-current={item.current ? "page" : undefined}
@@ -60,7 +63,7 @@ export default function NavBar() {
                     )}
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
