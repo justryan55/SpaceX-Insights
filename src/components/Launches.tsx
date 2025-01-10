@@ -28,7 +28,7 @@ interface LaunchesData {
 
 const GET_LAUNCHES = gql`
   query {
-    launches(limit: 10) {
+    launches {
       mission_name
       launch_year
       launch_date_utc
