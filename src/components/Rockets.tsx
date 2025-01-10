@@ -85,13 +85,29 @@ const DragonsBarGraph = () => {
           <BarChart data={formattedData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis />
+            <YAxis yAxisId="left" domain={[0, "auto"]} />
+
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              dataKey="payload_capacity"
+              stroke="#4A90E2"
+              domain={[0, "auto"]}
+            />
             <Tooltip />
-            <Bar dataKey="diameter" fill="#8884d8" name="Diameter (feet)" />
             <Bar
+              yAxisId="left"
+              dataKey="diameter"
+              fill="#8884d8"
+              name="Diameter (feet)"
+              barSize={30}
+            />
+            <Bar
+              yAxisId="right"
               dataKey="payload_capacity"
               fill="#4A90E2"
               name="Payload Capacity (lbs)"
+              barSize={30}
             />
           </BarChart>
         </ResponsiveContainer>
